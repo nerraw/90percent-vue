@@ -1,0 +1,97 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="index.js"></script>
+    <link rel="stylesheet" href="index.css">
+
+</head>
+
+<body>
+
+    <div class="container maincontainer" id="app">
+        <!--Header-->
+        <div class="card text-center my-4">
+            <h2>90Percent</h2>
+        </div>
+
+        <transition name="mode" mode="out-in">
+            <!--Rules-->
+            <div key="rules" v-if="state==='rules'">
+                <div class="card text-center my-4">
+                    <h4>How to Play</h4>
+                    <br/>
+                    <p>You will be presented with 10 quantitative questions and asked to provide an range in which you believe the answer lies. The questions are tough though, and it will be hard to get the questions right without giving a really big window.
+                    </p>
+                    <p>But that's OK!</p>
+                    <p>This is a game to test how well you can judge your own confidence. The range you provide should be a "90-percent confidence interval." That is to say, you should only be 90% confident that the answer lies in the range, and on average
+                        you should only get 90% of the questions correct. Thus the closer you are to getting 1 out of 10 wrong, the better you're doing!
+                    </p>
+                    <p>And that's all there is to it. When you're ready, click the 'Start' button.</p>
+                </div>
+                <div class="col text-center">
+                    <button type="button" class="btn btn-primary" @click="state='playing'">Start!</button>
+                </div>
+            </div>
+
+            <!--Playing-->
+            <div key="playing" v-if="state==='playing'">
+                <div class="card text-center">
+                    <transition name="question" mode="out-in">
+                        <div v-bind:key="active" class="my-3 col-md-6 offset-md-3 text-center">{{questions[active].text}}</div>
+                    </transition>
+                    <br/>
+                    <br/>
+                    <label class="col-form-label"> I think it is between </label>
+                    <br/>
+                    <div class="row mb-3">
+                        <input v-model="questions[active].min" type="number" class="col-md-2 offset-md-3 form-control" placeholder="Min"></input>
+                        <label class="col-md-2 col-form-label"> and </label>
+                        <input v-model="questions[active].max" type="number" class="col-md-2 form-control" placeholder="Max"></input>
+                    </div>
+
+                    <div class="col text-center">
+                        <button type="button" class="btn btn-primary" @click="submit()">Next</button>
+                    </div>
+                </div>
+            </div>
+            <!--Results-->
+            <div key="results" v-if="state==='results'" class="card text-center">
+                <h4>Results</h4>
+                <h5>You got {{percentCorrect()}}% correct.</h5>
+                <br/>
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Question</th>
+                            <th scope="col" class="text-center">Answer</th>
+                            <th scope="col" class="text-center">Your Range</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(q, i) in questions" v-bind:class="[isCorrect(q) ? 'table-success' : 'table-danger']">
+                            <th scope="row">{{i+1}}</th>
+                            <td>{{q.text}}</td>
+                            <td class="text-center" style="font-weight: bold;">{{withCommas(q.ans)}}</td>
+                            <td class="text-center">{{withCommas(q.min)}} to {{withCommas(q.max)}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="col text-center">
+                    <button type="button" class="btn btn-primary" @click="newGame()">Play Again</button>
+                </div>
+            </div>
+
+        </transition>
+
+        <footer class="page-footer font-small">
+            <!-- Copyright -->
+            <div class="footer-copyright text-center py-3">© 2019 Warren Brodsky</div>
+            <!-- Copyright -->
+        </footer>
+</body>
+
+
+</html>
