@@ -31,7 +31,7 @@
                     <p>And that's all there is to it. When you're ready, click the 'Start' button.</p>
                 </div>
                 <div class="col text-center">
-                    <button type="button" class="btn btn-primary" @click="state='playing'">Start!</button>
+                    <button type="button" class="btn btn-primary" @click="newGame()">Start!</button>
                 </div>
             </div>
 
@@ -43,7 +43,7 @@
                     </transition>
                     <br/>
                     <br/>
-                    <label class="col-form-label"> I think it is between </label>
+                    <label class="col-form-label"> I am 90% confident the answer is between </label>
                     <br/>
                     <div class="row mb-3">
                         <input v-model="questions[active].min" type="number" class="col-md-2 offset-md-3 form-control" placeholder="Min"></input>
